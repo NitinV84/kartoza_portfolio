@@ -1,0 +1,56 @@
+# Python Bytecode Files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+
+# Environment Variables & Secrets
+.env
+*.env
+
+# Django & Database Files
+db.sqlite3
+*.sqlite3
+*.log
+*.pot
+
+# Migrations (Optional: Keep if tracking migrations)
+**/migrations/* 
+!**/migrations/__init__.py
+
+# Compiled Files
+*.pyc
+*.pyo
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# MacOS & System Files
+.DS_Store
+Thumbs.db
+
+# Logs & Debugging
+logs/
+*.log
+nohup.out
+
+# Static & Media Files (If using collectstatic)
+staticfiles/
+media/
+
+# Node Modules (If using frontend dependencies)
+node_modules/
+npm-debug.log
+yarn.lock
+package-lock.json
+
+# Docker & Deployment
+*.pid
+*.tar
+celerybeat-schedule
