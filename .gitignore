@@ -17,10 +17,6 @@ db.sqlite3
 *.log
 *.pot
 
-# Migrations (Optional: Keep if tracking migrations)
-**/migrations/* 
-!**/migrations/__init__.py
-
 # Compiled Files
 *.pyc
 *.pyo
