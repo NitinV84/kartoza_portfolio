@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .profile-container {
+            max-width: 500px;
+            margin: 60px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .profile-header img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #007bff;
+        }
+        .profile-header h2 {
+            margin-top: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .profile-header p {
+            color: #6c757d;
+            font-size: 16px;
+        }
+        .profile-details {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .profile-details p {
+            font-size: 16px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .edit-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="profile-container">
+        <div class="profile-header">
+            <!-- Placeholder Profile Image -->
+            <img src="https://avatars.githubusercontent.com/u/7395888?s=280&v=4" alt="User Avatar">
+            <h2>{{ profile.user.get_full_name }}</h2>
+        </div>
+
+        <div class="profile-details">
+            <p><strong>Home Address:</strong> {{ profile.home_address }}</p>
+            <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+            <p><strong>Location:</strong> 
+                Latitude: {{ profile.location.y }}, Longitude: {{ profile.location.x }}
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
