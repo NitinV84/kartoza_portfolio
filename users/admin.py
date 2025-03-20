@@ -9,6 +9,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from .forms import CustomUserCreationForm
+from django.contrib.gis import admin
 
 
 class CustomUserAdmin(UserAdmin):
@@ -64,5 +65,8 @@ class CustomUserAdmin(UserAdmin):
             send_mail(subject, message, settings.EMAIL_HOST_USER, [obj.email])
 
 
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.GISModelAdmin):
+    list_display = ['id', 'user', 'location', 'home_address']
+
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(UserProfile)
