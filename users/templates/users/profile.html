@@ -50,8 +50,9 @@
             padding: 8px 0;
             border-bottom: 1px solid #e0e0e0;
         }
-        .edit-btn {
+        .edit-btn, .logout-btn {
             margin-top: 20px;
+            width: 100%;
         }
         #map {
             height: 300px;
@@ -82,6 +83,12 @@
 
         <!-- Edit Profile Button -->
         <a href="{% url 'edit_profile' profile.id %}" class="btn btn-primary edit-btn">Edit Profile</a>
+
+        <!-- Logout Button -->
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger logout-btn" type="submit">Logout</button>
+        </form>
     </div>
 </div>
 
