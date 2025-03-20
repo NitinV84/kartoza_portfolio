@@ -5,3 +5,4 @@ django-leaflet==0.31.0
 sqlparse==0.5.3
 python-dotenv==1.0.1
 psycopg-binary==3.2.6
+django-admin-logs==1.4.0

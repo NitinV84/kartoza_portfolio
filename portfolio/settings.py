@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'users',
     'leaflet',
-
+    "django_admin_logs",
+    
 ]
 
 MIDDLEWARE = [
