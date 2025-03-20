@@ -1,14 +1,14 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, UpdateView
-from django.urls import reverse_lazy
-from .models import UserProfile, CustomUser
-from django.contrib.auth.views import PasswordResetConfirmView
 from django.contrib import messages
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.views import LoginView, PasswordResetConfirmView
+from django.core.serializers import serialize
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import ListView, TemplateView, UpdateView
+
 from .forms import UserProfileForm
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from .models import CustomUser, UserProfile
 
 
 class UserLoginView(LoginView):
@@ -124,3 +124,34 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
             return HttpResponse("You are not allowed to edit this profile.", status=403)
 
         return super().dispatch(request, *args, **kwargs)
+
+
+class UserMapView(UserPassesTestMixin, TemplateView):
+    """
+    Class-based view to display a full-screen map with all registered users' locations.
+    Only admin users can access this page.
+    """
+
+    template_name = "users/map.html"
+
+    def test_func(self):
+        """Allow only admin users to access the map."""
+        return self.request.user.is_superuser
+
+    def handle_no_permission(self):
+        """Return a Forbidden response if the user is not an admin."""
+        return HttpResponseForbidden("You are not allowed to view this page.")
+
+    def get_context_data(self, **kwargs):
+        """Pass user locations as JSON data to the template."""
+        context = super().get_context_data(**kwargs)
+        users = UserProfile.objects.exclude(
+            location=None
+        )  # Exclude users without a location
+        context["users_json"] = serialize(
+            "geojson",
+            users,
+            geometry_field="location",
+            fields=("user", "home_address", "phone_number"),
+        )
+        return context
