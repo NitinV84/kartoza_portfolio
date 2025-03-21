@@ -59,20 +59,34 @@
             <div class="form-group">
                 <label for="id_home_address">Home Address</label>
                 <input type="text" name="home_address" id="id_home_address" class="form-control" value="{{ form.home_address.value }}">
+                {% if form.home_address.errors %}
+                    <div class="text-danger">
+                        {{ form.home_address.errors.0 }}
+                    </div>
+                {% endif %}
             </div>
-
             <!-- Phone Number -->
             <div class="form-group">
                 <label for="id_phone_number">Phone Number</label>
                 <input type="text" name="phone_number" id="id_phone_number" class="form-control" value="{{ form.phone_number.value }}">
+                {% if form.phone_number.errors %}
+                    <div class="text-danger">
+                        {{ form.phone_number.errors.0 }}
+                    </div>
+                {% endif %}
             </div>
 
-            <!-- Location Label -->
+            <!-- Location -->
             <div class="form-group">
                 <label for="id_location"><strong>Select Your Location:</strong></label>
                 <p class="text-muted">Drag the marker on the map to update your location.</p>
                 <input type="hidden" name="location" id="id_location" value="{{ form.location.value }}">
                 <div id="map"></div>
+                {% if form.location.errors %}
+                    <div class="text-danger">
+                        {{ form.location.errors.0 }}
+                    </div>
+                {% endif %}
             </div>
 
             <button type="submit" class="btn btn-primary btn-save">Save Changes</button>
