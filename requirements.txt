@@ -6,3 +6,5 @@ sqlparse==0.5.3
 python-dotenv==1.0.1
 psycopg-binary==3.2.6
 django-admin-logs==1.4.0
+django-phonenumber-field==8.0.0
+phonenumbers==9.0.1
