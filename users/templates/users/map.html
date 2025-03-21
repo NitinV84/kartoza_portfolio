@@ -32,26 +32,35 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var map = L.map('map').setView([37.0902, -95.7129], 4); // Default center (USA)
-
+    
         // Add OpenStreetMap tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-
+    
         // Load user locations from Django context
         var users = {{ users_json|safe }};
-        
+    
         L.geoJSON(users, {
             pointToLayer: function (feature, latlng) {
                 var marker = L.marker(latlng);
                 var user = feature.properties;
-                marker.bindPopup(
-                    `<strong>${user.user}</strong><br>
-                     Address: ${user.home_address}<br>
-                     Name: ${user.home_address}<br>
-
-                     Phone: ${user.phone_number}`
-                );
+    
+                var popupContent = `
+                    <strong>${user.first_name} ${user.last_name}</strong><br>
+                    Email: ${user.email}<br>
+                    Address: ${user.home_address}<br>
+                    Phone: ${user.phone_number}
+                `;
+    
+                // Show popup on hover instead of click
+                marker.on('mouseover', function () {
+                    this.bindPopup(popupContent).openPopup();
+                });
+                marker.on('mouseout', function () {
+                    this.closePopup();
+                });
+    
                 return marker;
             }
         }).addTo(map);
