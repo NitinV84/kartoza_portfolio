@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.gis.db import models as geomodels
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class CustomUser(AbstractUser):
@@ -29,7 +30,7 @@ class UserProfile(models.Model):
     """
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     home_address = models.TextField(null=True)
-    phone_number = models.CharField(max_length=15, null=True)
+    phone_number = PhoneNumberField(null=True, blank=True)
     location = geomodels.PointField(null=True)
 
     def __str__(self):
