@@ -1,7 +1,8 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, PasswordResetConfirmView
-from django.core.serializers import serialize
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -145,13 +146,30 @@ class UserMapView(UserPassesTestMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """Pass user locations as JSON data to the template."""
         context = super().get_context_data(**kwargs)
-        users = UserProfile.objects.exclude(
-            location=None
-        )  # Exclude users without a location
-        context["users_json"] = serialize(
-            "geojson",
-            users,
-            geometry_field="location",
-            fields=("user", "home_address", "phone_number"),
+        users = UserProfile.objects.exclude(location=None)
+
+        users_data = []
+        for user in users:
+            users_data.append(
+                {
+                    "type": "Feature",
+                    "geometry": (
+                        json.loads(user.location.geojson) if user.location else None
+                    ),
+                    "properties": {
+                        "username": user.user.username,
+                        "first_name": user.user.first_name,
+                        "last_name": user.user.last_name,
+                        "email": user.user.email,
+                        "home_address": user.home_address or "N/A",
+                        "phone_number": (
+                            str(user.phone_number) if user.phone_number else "N/A"
+                        ),
+                    },
+                }
+            )
+
+        context["users_json"] = json.dumps(
+            {"type": "FeatureCollection", "features": users_data}
         )
         return context
