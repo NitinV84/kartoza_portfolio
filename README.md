@@ -1,6 +1,5 @@
 # Portfolio App
 
-
 ## Table of Contents
 1. [Project Overview](#project-overview)
 2. [Features](#features)
@@ -16,11 +15,10 @@
 6. [User Management](#user-management)
 7. [API Endpoints](#api-endpoint)
 8. [Testing](#testing)
-
+9. [CI/CD and Deployment](#cicd-and-deployment)
 
 ## Project Overview
 This is a Django-based portfolio application that allows users to create profiles, specify their locations, and visualize user distribution on an interactive map. The project is containerized using Docker and utilizes PostgreSQL with PostGIS for geospatial data.
-
 
 ## Features
 - User authentication (signup/login/logout)
@@ -36,6 +34,7 @@ This is a Django-based portfolio application that allows users to create profile
 - **Frontend**: HTML, Bootstrap, Leaflet.js (for maps)
 - **Containerization**: Docker, Docker Compose
 - **Testing**: Django Test Framework
+- **CI/CD**: GitHub Actions, AWS EC2
 
 ---
 
@@ -97,13 +96,12 @@ docker exec -it django_app python manage.py test
 - Open your browser and go to: `http://localhost:8000/`
 - Admin panel: `http://localhost:8000/admin/`
 
-
 ## User Management
 - Only an admin can create a new user through the admin panel using the user's email and name. There is no separate API or UI for creating users.
 - Log in as an admin, go to the "Users" model under the "USERS" section, and click the "Add User" button in the top-right corner.
 - After adding the user, they will receive an email with their username details and a link to reset their password so they can set their own password.
-
 - To show the map click on the "VIEW MAP" button in the top right corner.
+
 ---
 
 ## API Endpoint
@@ -129,4 +127,36 @@ If running locally:
 ```sh
 python manage.py test
 ```
+
+---
+
+## CI/CD and Deployment
+This project is deployed using **GitHub Actions CI/CD pipeline** to an **AWS EC2 instance**.
+
+### Deployment Process
+1. On every push to the `master` branch, GitHub Actions:
+   - Runs test cases in a Docker container.
+   - If tests pass, it deploys the latest code to the AWS EC2 instance.
+2. The deployment includes:
+   - Pulling the latest code from the repository.
+   - Restarting Docker containers with the latest changes.
+
+### Accessing the Deployed App
+The live application is hosted on **AWS EC2** and can be accessed at:
+- **Web App**: [http://13.233.158.73:8000/](http://13.233.158.73:8000/)
+
+- **Admin Panel**: [http://13.233.158.73:8000/admin/](http://13.233.158.73:8000/admin/)
+
+### Admin Login Credentials
+- **Username**: root
+- **Password**: root
+
+
+### User Login Credentials to the login page
+- **Username**: user1
+- **Password**: User1@321
+
+- **Username**: user2
+- **Password**: User2@321
+
 ---
