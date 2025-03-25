@@ -66,52 +66,59 @@
 
 <div class="container">
     <div class="profile-container">
-        <div class="profile-header">
-            <!-- Placeholder Profile Image -->
-            <img src="https://avatars.githubusercontent.com/u/7395888?s=280&v=4" alt="User Avatar">
-            <h2>{{ profile.user.get_full_name }}</h2>
-        </div>
+        {% if profile %}
+            <div class="profile-header">
+                <img src="https://avatars.githubusercontent.com/u/7395888?s=280&v=4" alt="User Avatar">
+                <h2>{{ profile.user.get_full_name }}</h2>
+            </div>
 
-        <div class="profile-details">
-            <p><strong>Home Address:</strong> {{ profile.home_address }}</p>
-            <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
-            
-            <!-- Location Display -->
-            <p><strong>Location:</strong></p>
-            <div id="map"></div>
-        </div>
+            <div class="profile-details">
+                <p><strong>Home Address:</strong> {{ profile.home_address }}</p>
+                <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+                
+                <p><strong>Location:</strong></p>
+                <div id="map"></div>
+            </div>
 
-        <!-- Edit Profile Button -->
-        <a href="{% url 'edit_profile' profile.id %}" class="btn btn-primary edit-btn">Edit Profile</a>
+            {% if profile.id %}
+                <a href="{% url 'edit_profile' profile.id %}" class="btn btn-primary edit-btn">Edit Profile</a>
+            {% endif %}
 
-        <!-- Logout Button -->
-        <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button class="btn btn-danger logout-btn" type="submit">Logout</button>
-        </form>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-danger logout-btn" type="submit">Logout</button>
+            </form>
+
+        {% else %}
+            <div class="alert alert-danger">
+                <strong>Profile not found.</strong> Please contact the administrator.
+            </div>
+        {% endif %}
     </div>
 </div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var defaultLat = {{ profile.location.y }};
-        var defaultLon = {{ profile.location.x }};
-        var map = L.map('map').setView([defaultLat, defaultLon], 12);
+{% if profile %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var defaultLat = {{ profile.location.y|default:0 }};
+            var defaultLon = {{ profile.location.x|default:0 }};
+            var map = L.map('map').setView([defaultLat, defaultLon], 12);
 
-        // Add OpenStreetMap tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
 
-        // Add a marker at the user's location
-        L.marker([defaultLat, defaultLon]).addTo(map)
-            .bindPopup("Your Location")
-            .openPopup();
-    });
-</script>
+            if (defaultLat !== 0 && defaultLon !== 0) {
+                L.marker([defaultLat, defaultLon]).addTo(map)
+                    .bindPopup("Your Location")
+                    .openPopup();
+            }
+        });
+    </script>
+{% endif %}
 
 </body>
 </html>

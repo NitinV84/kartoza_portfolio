@@ -97,8 +97,13 @@ class ProfileView(LoginRequiredMixin, ListView):
     context_object_name = "profile"
     login_url = reverse_lazy("login")
 
-    def get_queryset(self):
-        return super().get_queryset().get(user=self.request.user)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context["profile"] = UserProfile.objects.get(user=self.request.user)
+        except UserProfile.DoesNotExist:
+            context["profile"] = None
+        return context
 
 
 class EditProfileView(LoginRequiredMixin, UpdateView):
