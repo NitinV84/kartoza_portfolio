@@ -14,7 +14,6 @@ urlpatterns = [
     path(
         "profile/edit/<int:pk>/", views.EditProfileView.as_view(), name="edit_profile"
     ),
-    path('map/', views.UserMapView.as_view(), name='user_map'),
     path("logout/", LogoutView.as_view(next_page="login"), name="logout"),
 
 ]

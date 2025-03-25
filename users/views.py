@@ -1,11 +1,13 @@
 import json
 
-from django.contrib import messages
+from django.contrib import admin, messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, PasswordResetConfirmView
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, TemplateView, UpdateView
 
 from .forms import UserProfileForm
@@ -127,6 +129,7 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
 
+@method_decorator(staff_member_required, name='dispatch')
 class UserMapView(UserPassesTestMixin, TemplateView):
     """
     Class-based view to display a full-screen map with all registered users' locations.
@@ -146,6 +149,9 @@ class UserMapView(UserPassesTestMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """Pass user locations as JSON data to the template."""
         context = super().get_context_data(**kwargs)
+
+        # Add admin context for the sidebar
+        context.update(admin.site.each_context(self.request))
         users = UserProfile.objects.exclude(location=None)
 
         users_data = []

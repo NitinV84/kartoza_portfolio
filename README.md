@@ -77,7 +77,7 @@ Check running containers:
 ```sh
 docker ps
 ```
-Run migrations manually:
+Run migrations manually (Optional):
 ```sh
 docker exec -it django_app python manage.py migrate
 ```
@@ -103,6 +103,7 @@ docker exec -it django_app python manage.py test
 - Log in as an admin, go to the "Users" model under the "USERS" section, and click the "Add User" button in the top-right corner.
 - After adding the user, they will receive an email with their username details and a link to reset their password so they can set their own password.
 
+- To show the map click on the "VIEW MAP" button in the top right corner.
 ---
 
 ## API Endpoint
@@ -111,12 +112,11 @@ docker exec -it django_app python manage.py test
 | GET    | /users/profile/  | Get user profile |
 | POST    | /users/profile/edit/{id}/ | Edit user profile  |
 | POST   | /users/login/  | Authenticate user |
-| GET   | /users/map/  | List all user in map |
 | POST   | /users/logout/  | Logout user |
 
 ### Viewing the User Map
 - Only admin users can view the map.
-- Log in as an admin and navigate to `http://localhost:8000/users/map/`
+- Log in as an admin and go to the User model under the Users section. Click the "View Map" button in the top right corner.
 
 ---
 

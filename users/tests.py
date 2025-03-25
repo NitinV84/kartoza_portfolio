@@ -89,7 +89,7 @@ class EditProfileViewTests(TestCase):
             self.edit_url,
             {
                 "home_address": "New Address",
-                "phone_number": "1234567890",
+                "phone_number": "+911234567890",
                 "location": "POINT(1 1)",
             },
         )
@@ -121,7 +121,7 @@ class EditProfileViewTests(TestCase):
 class UserMapViewTests(TestCase):
     def setUp(self):
         self.client = Client()
-        self.map_url = reverse("user_map")
+        self.map_url = reverse("admin:admin_user_map")
         self.admin_user = CustomUser.objects.create_superuser(
             username="admin", password="adminpass123", email="admin@gmail.com"
         )
@@ -140,15 +140,12 @@ class UserMapViewTests(TestCase):
         """Test that a non-admin user cannot access the map."""
         self.client.login(username="regularuser", password="regularpass123")
         response = self.client.get(self.map_url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
 
     def test_unauthenticated_user_access(self):
         """Test that an unauthenticated user is redirected to the login page."""
         response = self.client.get(self.map_url)
-        self.assertEqual(response.status_code, 403)
-        self.assertEqual(
-            response.content.decode(), "You are not allowed to view this page."
-        )
+        self.assertEqual(response.status_code, 302)
 
 
 class LogoutViewTests(TestCase):
